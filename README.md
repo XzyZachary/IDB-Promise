@@ -1,5 +1,5 @@
 # IDB-Promise
-从小白开始接触，踩的坑很多。。后来也看到很多indexeddb的promise化，木有看到比较好的或者有的根本不靠谱
+踩的坑很多。。后来也看到很多indexeddb的promise化，没有看到比较好的或者有的根本不靠谱
 alasql貌似不错。几万数据的话还能撑住。 Dexie.js 不错的，用TS写的 但是需求不需要那么复杂就没采纳
 
 
