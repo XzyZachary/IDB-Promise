@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/idb@7/build/umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alasql@1.7"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="set('key1', 'qqqqqq')">set1</button>
+    <button onclick="set('key2', 'wwwwww')">set2</button>
+    <button onclick="set('key3', '呜呜呜呜呜')">set3</button>
+    <button onclick="get('key1')">get</button>
+    <div>获取到的key：</div>
+    <div id="key1"></div>
+
+    <button onclick="get('key2')">get</button>
+    <div>获取到的key2：</div>
+    <div id="key2"></div>
+
+    <button onclick="get('key3')">get</button>
+    <div>获取到的key3：</div>
+    <div id="key3"></div>
+
+
+
+    <button onclick="del('key3')">del</button>
+
+
+    <button onclick="clearAll()">clear</button>
+
+
+    <button onclick="keys()">keys</button>
+    <div>获取到的key：</div>
+    <div id="key"></div>
+
+
+
+    <button onclick="alasqlTT()">alasql</button>
+    <button onclick="promise()">promise</button>
+</body>
+
+</html>
+
+<script>
+    const dbPromise = idb.openDB('keyval-store', 1, {
+        upgrade(db) {
+            db.createObjectStore('keyval');
+        },
+    });
+    async function get(key) {
+        const a = await (await dbPromise).get('keyval', key);
+        document.getElementById(key).innerHTML = a;
+        console.log(a);
+        // return (await dbPromise).get('keyval', key);
+    };
+    async function set(key, val) {
+        return (await dbPromise).put('keyval', val, key);
+    };
+    async function del(key) {
+        return (await dbPromise).delete('keyval', key);
+    };
+    async function clearAll() {
+        console.log(3333);
+        return (await dbPromise).clear('keyval');
+    };
+    async function keys() {
+        const a = await (await dbPromise).getAllKeys('keyval');
+
+        document.getElementById('key').innerHTML = a.join('，');
+    };
+
+    function alasqlTT() {
+        alasql("CREATE TABLE cities (city string, pop number)");
+        alasql("INSERT INTO cities VALUES ('Paris',2249975),('Berlin',3517424),('Madrid',3041579)");
+    }
+
+
+    function promise() {
+        alasql('CREATE TABLE test (language INT, hello STRING)');
+        alasql("INSERT INTO test VALUES (1,'Hello!')");
+        alasql("INSERT INTO test VALUES (2,'Aloha!')");
+        alasql("INSERT INTO test VALUES (3,'Bonjour!')");
+
+        alasql.promise('SELECT * FROM test WHERE language > 1').then(function (res) {
+            console.log(res);
+        });
+    }
+</script>
